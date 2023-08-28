@@ -1,12 +1,20 @@
 import { ConversationChain } from "langchain/chains";
 import { OpenAI } from "langchain/llms/openai";
-import { character } from "/Users/iniad/Documents/TS/alphasample/src/chara"; 
-import { buy } from "/Users/iniad/Documents/TS/alphasample/src/buy"; 
-import { sell } from "/Users/iniad/Documents/TS/alphasample/src/sell"; 
+// import { character } from "chara";  
+// import { buy } from "buy";  
+// import { sell } from "sell";
 import axios from "axios";
-
+import dotenv from "dotenv"
 // 環境変数
-require("dotenv").config();
+dotenv.config()
+const env = process.env;
+console.log('envファイル', env.OPENAI_API_KEY);
+
+
+
+const llm = new OpenAI({
+  openAIApiKey: env.OPENAI_API_KEY,
+});
 /*
 const getStockPrice = async () => {
     const apiKey = "";
@@ -35,10 +43,27 @@ const getStockPrice = async () => {
     }
 };
 */
-export const run = async () => {
-  // LLMの準備
-  const llm = new OpenAI({ temperature: 0 });
 
+export const character = `
+あなたが先程購入した金額をxとします。xが2%減少した際には即売却するものとします。xが上昇している場合は下がるまでに到達した最大の額から2%減った際に売却するものとします。売却した日時を記録するようにしてください
+`;
+
+export const buy = `
+現在のFXのレートがあるものとします。あなたは今50万円持っているものとし、そのお金でFX投資をするものとします。
+`;
+export const sell = `
+売却した際の収支、日時を表示してください
+`;
+
+
+export const run = async () => {
+
+  
+  // LLMの準備
+  // const llm = new OpenAI({ temperature: 0 });
+  // const llm
+
+  
   // ConversationChainの準備
   const chain = new ConversationChain({ llm: llm });
 /*
